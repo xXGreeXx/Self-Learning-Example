@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Game));
             this.canvas = new System.Windows.Forms.PictureBox();
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
+            this.physicsTimerUpdate = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,11 +45,17 @@
             this.canvas.TabIndex = 0;
             this.canvas.TabStop = false;
             this.canvas.Paint += new System.Windows.Forms.PaintEventHandler(this.canvas_Paint);
+            this.canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.canvas_MouseDown);
             // 
             // updateTimer
             // 
             this.updateTimer.Interval = 16;
             this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
+            // 
+            // physicsTimerUpdate
+            // 
+            this.physicsTimerUpdate.Interval = 1000;
+            this.physicsTimerUpdate.Tick += new System.EventHandler(this.physicsTimerUpdate_Tick);
             // 
             // Game
             // 
@@ -68,6 +75,7 @@
 
         private System.Windows.Forms.PictureBox canvas;
         private System.Windows.Forms.Timer updateTimer;
+        private System.Windows.Forms.Timer physicsTimerUpdate;
     }
 }
 

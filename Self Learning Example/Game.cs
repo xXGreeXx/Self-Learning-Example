@@ -74,7 +74,7 @@ namespace Self_Learning_Example
             float y = 0;
             for (int i = 0; i < tiles.Length; i++)
             {
-                g.DrawRectangle(Pens.DarkGray, x, y, tileSize, tileSize);
+                //g.DrawRectangle(Pens.DarkGray, x, y, tileSize, tileSize);
 
                 //draw players
                 if (i == player1Index)
@@ -175,9 +175,11 @@ namespace Self_Learning_Example
                     int weightIndex = 0;
                     foreach (float weight in neuron.weights)
                     {
+                        float conWeight = weight < 25 ? weight : 25;
+
                         float targetY = y + 125 - (player1Brain.perceptrons[layerIndex - 1].Count * 55) / 2 + 20 + (weightIndex * 55);
-                        if (weight < 0) g.DrawLine(new Pen(Brushes.Black, weight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
-                        else g.DrawLine(new Pen(Brushes.White, weight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
+                        if (weight < 0) g.DrawLine(new Pen(Brushes.Black, conWeight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
+                        else g.DrawLine(new Pen(Brushes.White, conWeight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
 
                         weightIndex++;
                     }
@@ -204,9 +206,11 @@ namespace Self_Learning_Example
                     int weightIndex = 0;
                     foreach (float weight in neuron.weights)
                     {
+                        float conWeight = weight < 25 ? weight : 25;
+
                         float targetY = y + 125 - (player1Brain.perceptrons[layerIndex - 1].Count * 55) / 2 + 20 + (weightIndex * 55);
-                        if (weight < 0) g.DrawLine(new Pen(Brushes.Black, weight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
-                        else g.DrawLine(new Pen(Brushes.White, weight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
+                        if (weight < 0) g.DrawLine(new Pen(Brushes.Black, conWeight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
+                        else g.DrawLine(new Pen(Brushes.White, conWeight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
 
                         weightIndex++;
                     }
@@ -232,8 +236,14 @@ namespace Self_Learning_Example
         {
             if (started)
             {
-                player1Index = simulateNeuralNetwork(player1Brain, player1Index, player2Index);
-                player2Index = simulateNeuralNetwork(player2Brain, player2Index, player1Index);
+                player1Index = simulateNeuralNetwork(player1Brain, player1Index, player2Index, out player1Rotation);
+                player2Index = simulateNeuralNetwork(player2Brain, player2Index, player1Index, out player2Rotation);
+
+                int addIndex = r.Next(0, widthOfTileArray * heightOfTileArray);
+                if (!apples.Contains(addIndex))
+                {
+                    apples.Add(addIndex);
+                }
             }
         }
 
@@ -250,7 +260,7 @@ namespace Self_Learning_Example
         }
 
         //simulate nn
-        private int simulateNeuralNetwork(NeuralNetwork brain, int positionIndex, int enemyPositionIndex)
+        private int simulateNeuralNetwork(NeuralNetwork brain, int positionIndex, int enemyPositionIndex, out int playerRotation)
         {
             //get field of view
             float[] inputs = new float[3];
@@ -321,16 +331,38 @@ namespace Self_Learning_Example
             //feed to nn
             float[] output = brain.ForwardPropagate(inputs);
 
-            //train nn
-            //TODO\\
-            brain.BackPropagate(inputs, output[0]);
-
             //move with output
             positionIndex += output[0] < 0 ? -1 : 1;
             positionIndex += output[1] < 0 ? -1 * widthOfTileArray : 1 * widthOfTileArray;
+            playerRotation = output[0] > 0 ? output[1] < 0 ? 0 : 180 : output[1] > 0 ? 270 : 90;
+
+            //check if it went off the edge
+            int posX = positionIndex / heightOfTileArray;
+            int posY = positionIndex / widthOfTileArray;
+            if (posX < 0) posX = widthOfTileArray;
+            if (posX > widthOfTileArray) posX = 0;
+            if (posY < 0) posY = heightOfTileArray;
+            if (posY > heightOfTileArray) posY = 0;
+            positionIndex = posX + posY * widthOfTileArray;
 
             //handle collisions
+            float appleAcheived = 0.0F;
+            for (int appleIndex = 0; appleIndex < apples.Count; appleIndex++)
+            {
+                if (apples[appleIndex] == positionIndex)
+                {
+                    apples.RemoveAt(appleIndex);
+                    appleAcheived += 0.5F;
+                }
+            }
 
+
+            //train nn
+            //TODO\\
+            if (appleAcheived.Equals(0)) appleAcheived -= 0.5F;
+
+            brain.BackPropagate(inputs, output[0] + appleAcheived);
+            
 
             //return new position of player
             return positionIndex;

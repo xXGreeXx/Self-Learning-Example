@@ -6,7 +6,7 @@ namespace Self_Learning_Example
     public class NeuralNetwork
     {
         //define global variables
-        public static float learningRate { get; } = 0.05F;
+        public static float learningRate { get; } = 0.25F;
         public List<List<Perceptron>> perceptrons { get; private set; } = new List<List<Perceptron>>();
 
         //constructor
@@ -52,7 +52,7 @@ namespace Self_Learning_Example
             float[] inputs = inputsToFeed;
 
             //iterate over layer
-            for (int layerIndex = perceptrons.Count - 1; layerIndex > 1; layerIndex--)
+            for (int layerIndex = perceptrons.Count - 1; layerIndex > 0; layerIndex--)
             {
                 List<Perceptron> layer = perceptrons[layerIndex];
 
@@ -61,7 +61,6 @@ namespace Self_Learning_Example
                 {
                     List<Perceptron> forwardPropLayer = perceptrons[forwardPropLayerIndex];
                     float[] inputsBuffer = new float[forwardPropLayer.Count];
-
                     //iterate over forward propagate neurons
                     for (int forwardPropNeuronIndex = 0; forwardPropNeuronIndex < forwardPropLayer.Count; forwardPropNeuronIndex++)
                     {

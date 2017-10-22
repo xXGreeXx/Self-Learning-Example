@@ -66,6 +66,7 @@ namespace Self_Learning_Example
             Graphics g = e.Graphics;
             int width = canvas.Width;
             int height = canvas.Height;
+            Brush shadowGray = new SolidBrush(Color.FromArgb(120, 130, 130, 130));
 
             #region Grid
             //draw grid
@@ -83,12 +84,58 @@ namespace Self_Learning_Example
                     //draw field of view
                     if (player1Rotation == 0)
                     {
-
+                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x - 0 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                    }
+                    if (player1Rotation == 90)
+                    {
+                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y - 0 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                    }
+                    if (player1Rotation == 180)
+                    {
+                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x - 0 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                    }
+                    if (player1Rotation == 270)
+                    {
+                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y - 0 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                     }
                 }
                 if (i == player2Index)
                 {
                     g.FillRectangle(Brushes.Red, x + 1, y + 1, tileSize - 1, tileSize - 1);
+
+                    //draw field of view
+                    if (player1Rotation == 0)
+                    {
+                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x - 0 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                    }
+                    if (player1Rotation == 90)
+                    {
+                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y - 0 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                    }
+                    if (player1Rotation == 180)
+                    {
+                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x - 0 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                    }
+                    if (player1Rotation == 270)
+                    {
+                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y - 0 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
+                    }
                 }
 
                 //draw apples

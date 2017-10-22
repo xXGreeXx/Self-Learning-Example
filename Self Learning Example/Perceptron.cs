@@ -18,7 +18,7 @@ namespace Self_Learning_Example
 
             for (int i = 0; i < weights.Length; i++)
             {
-                weights[i] = (float)Game.r.NextDouble();
+                weights[i] = (float)Game.r.NextDouble() * Game.r.Next(-1, 2);
             }
 
             //define outputs

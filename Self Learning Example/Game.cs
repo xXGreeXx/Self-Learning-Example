@@ -67,17 +67,24 @@ namespace Self_Learning_Example
             int width = canvas.Width;
             int height = canvas.Height;
 
+            #region Grid
             //draw grid
             float x = 0;
             float y = 0;
             for (int i = 0; i < tiles.Length; i++)
             {
-                g.DrawRectangle(Pens.White, x, y, tileSize, tileSize);
+                g.DrawRectangle(Pens.DarkGray, x, y, tileSize, tileSize);
 
                 //draw players
                 if (i == player1Index)
                 {
                     g.FillRectangle(Brushes.Red, x + 1, y + 1, tileSize - 1, tileSize - 1);
+
+                    //draw field of view
+                    if (player1Rotation == 0)
+                    {
+
+                    }
                 }
                 if (i == player2Index)
                 {
@@ -100,6 +107,70 @@ namespace Self_Learning_Example
                     y += tileSize;
                 }
             }
+            #endregion
+
+            #region NNPreview
+            //draw neural network preview
+            g.FillRectangle(Brushes.Gray, 0, y, width, height - y);
+
+            //1
+            int xOfPreview1 = 0;
+            int yOfPreview1 = 0;
+
+            int layerIndex = 0;
+            foreach (List<Perceptron> layer in player1Brain.perceptrons)
+            {
+                yOfPreview1 = 0;
+                foreach (Perceptron neuron in layer)
+                {
+                    g.FillEllipse(Brushes.Black, xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2, 40, 40);
+
+                    int weightIndex = 0;
+                    foreach (float weight in neuron.weights)
+                    {
+                        float targetY = y + 125 - (player1Brain.perceptrons[layerIndex - 1].Count * 55) / 2 + 20 + (weightIndex * 55);
+                        if (weight < 0) g.DrawLine(new Pen(Brushes.Black, weight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
+                        else g.DrawLine(new Pen(Brushes.White, weight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
+
+                        weightIndex++;
+                    }
+
+                    yOfPreview1 += 55;
+                }
+
+                xOfPreview1 += 125;
+                layerIndex++;
+            }
+
+            //2
+            xOfPreview1 = 732;
+            yOfPreview1 = 0;
+
+            layerIndex = 0;
+            foreach (List<Perceptron> layer in player2Brain.perceptrons)
+            {
+                yOfPreview1 = 0;
+                foreach (Perceptron neuron in layer)
+                {
+                    g.FillEllipse(Brushes.Black, xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2, 40, 40);
+
+                    int weightIndex = 0;
+                    foreach (float weight in neuron.weights)
+                    {
+                        float targetY = y + 125 - (player1Brain.perceptrons[layerIndex - 1].Count * 55) / 2 + 20 + (weightIndex * 55);
+                        if (weight < 0) g.DrawLine(new Pen(Brushes.Black, weight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
+                        else g.DrawLine(new Pen(Brushes.White, weight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
+
+                        weightIndex++;
+                    }
+
+                    yOfPreview1 += 55;
+                }
+
+                xOfPreview1 += 125;
+                layerIndex++;
+            }
+            #endregion
 
             //draw text if not started
             if (!started)

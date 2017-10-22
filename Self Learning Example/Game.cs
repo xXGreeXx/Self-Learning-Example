@@ -12,12 +12,12 @@ namespace Self_Learning_Example
         int widthOfTileArray = 34;
         int heightOfTileArray = 21;
 
-        float player1Index = 0;
-        float player1Rotation = 0;
+        int player1Index = 0;
+        int player1Rotation = 0;
         NeuralNetwork player1Brain = new NeuralNetwork();
 
-        float player2Index = 0;
-        float player2Rotation = 0;
+        int player2Index = 0;
+        int player2Rotation = 0;
         NeuralNetwork player2Brain = new NeuralNetwork();
 
         List<float> apples = new List<float>();
@@ -232,7 +232,8 @@ namespace Self_Learning_Example
         {
             if (started)
             {
-
+                simulateNeuralNetwork(player1Brain, player1Index, player2Index);
+                simulateNeuralNetwork(player2Brain, player2Index, player2Index);
             }
         }
 
@@ -246,6 +247,88 @@ namespace Self_Learning_Example
             {
                 started = true;
             }
+        }
+
+        //simulate nn
+        private void simulateNeuralNetwork(NeuralNetwork brain, int positionIndex, int enemyPositionIndex)
+        {
+            //get field of view
+            float[] inputs = new float[3];
+            float[] fieldOfView = new float[3];
+
+            if (player1Rotation == 0)
+            {
+                fieldOfView = new float[3];
+                fieldOfView[0] = (player1Index + -1 * widthOfTileArray) - 1;
+                fieldOfView[1] = (player1Index + -1 * widthOfTileArray) - 0;
+                fieldOfView[2] = (player1Index + -1 * widthOfTileArray) + 1;
+            }
+            if (player1Rotation == 90)
+            {
+                fieldOfView = new float[3];
+                fieldOfView[0] = (player1Index + 1 * widthOfTileArray) + 1;
+                fieldOfView[1] = (player1Index + 0 * widthOfTileArray) + 1;
+                fieldOfView[2] = (player1Index + -1 * widthOfTileArray) + 1;
+            }
+            if (player1Rotation == 180)
+            {
+                fieldOfView = new float[3];
+                fieldOfView[0] = (player1Index + 1 * widthOfTileArray) - 1;
+                fieldOfView[1] = (player1Index + 1 * widthOfTileArray) - 0;
+                fieldOfView[2] = (player1Index + 1 * widthOfTileArray) + 1;
+            }
+            if (player1Rotation == 270)
+            {
+                fieldOfView = new float[3];
+                fieldOfView[0] = (player1Index + 1 * widthOfTileArray) - 1;
+                fieldOfView[1] = (player1Index + 0 * widthOfTileArray) - 1;
+                fieldOfView[2] = (player1Index + -1 * widthOfTileArray) - 1;
+            }
+
+            inputs[0] = 0.0F;
+            inputs[1] = 0.0F;
+            inputs[2] = 0.0F;
+
+            foreach (float apple in apples)
+            {
+                if (apple == fieldOfView[0])
+                {
+                    inputs[0] = 0.5F;
+                }
+                if (apple == fieldOfView[1])
+                {
+                    inputs[1] = 0.5F;
+                }
+                if (apple == fieldOfView[2])
+                {
+                    inputs[2] = 0.5F;
+                }
+            }
+
+            if (fieldOfView[0] == enemyPositionIndex)
+            {
+                inputs[0] = 1.0F;
+            }
+            if (fieldOfView[1] == enemyPositionIndex)
+            {
+                inputs[1] = 1.0F;
+            }
+            if (fieldOfView[2] == enemyPositionIndex)
+            {
+                inputs[2] = 1.0F;
+            }
+
+            //feed to nn
+            float[] output = player1Brain.ForwardPropagate(inputs);
+
+            //train nn
+            //TODO\\
+
+            //move with output
+
+
+            //handle collisions
+
         }
     }
 }

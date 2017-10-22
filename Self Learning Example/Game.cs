@@ -232,8 +232,8 @@ namespace Self_Learning_Example
         {
             if (started)
             {
-                simulateNeuralNetwork(player1Brain, player1Index, player2Index);
-                simulateNeuralNetwork(player2Brain, player2Index, player2Index);
+                player1Index = simulateNeuralNetwork(player1Brain, player1Index, player2Index);
+                player2Index = simulateNeuralNetwork(player2Brain, player2Index, player1Index);
             }
         }
 
@@ -250,7 +250,7 @@ namespace Self_Learning_Example
         }
 
         //simulate nn
-        private void simulateNeuralNetwork(NeuralNetwork brain, int positionIndex, int enemyPositionIndex)
+        private int simulateNeuralNetwork(NeuralNetwork brain, int positionIndex, int enemyPositionIndex)
         {
             //get field of view
             float[] inputs = new float[3];
@@ -319,16 +319,21 @@ namespace Self_Learning_Example
             }
 
             //feed to nn
-            float[] output = player1Brain.ForwardPropagate(inputs);
+            float[] output = brain.ForwardPropagate(inputs);
 
             //train nn
             //TODO\\
+            brain.BackPropagate(inputs, Game.r.Next((int)output[0], (int)output[1]));
 
             //move with output
-
+            positionIndex += output[0] < 0 ? -1 : 1;
+            positionIndex += output[1] < 0 ? -1 * widthOfTileArray : 1 * widthOfTileArray;
 
             //handle collisions
 
+
+            //return new position of player
+            return positionIndex;
         }
     }
 }

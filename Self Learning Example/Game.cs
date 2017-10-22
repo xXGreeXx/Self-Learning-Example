@@ -323,7 +323,7 @@ namespace Self_Learning_Example
 
             //train nn
             //TODO\\
-            brain.BackPropagate(inputs, Game.r.Next((int)output[0], (int)output[1]));
+            brain.BackPropagate(inputs, output[0]);
 
             //move with output
             positionIndex += output[0] < 0 ? -1 : 1;

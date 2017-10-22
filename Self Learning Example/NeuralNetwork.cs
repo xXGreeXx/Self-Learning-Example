@@ -49,11 +49,48 @@ namespace Self_Learning_Example
         //backpropagate
         public void BackPropagate(float[] inputsToFeed, float target)
         {
-            //forward prop to load error
-            ForwardPropagate(inputsToFeed);
+            float[] inputs = inputsToFeed;
 
+            //iterate over layer
+            for (int layerIndex = perceptrons.Count - 1; layerIndex > 1; layerIndex--)
+            {
+                List<Perceptron> layer = perceptrons[layerIndex];
 
+                //forward propagate inputs
+                for (int forwardPropLayerIndex = 1; forwardPropLayerIndex < layerIndex; forwardPropLayerIndex++)
+                {
+                    List<Perceptron> forwardPropLayer = perceptrons[forwardPropLayerIndex];
+                    float[] inputsBuffer = new float[forwardPropLayer.Count];
+
+                    //iterate over forward propagate neurons
+                    for (int forwardPropNeuronIndex = 0; forwardPropNeuronIndex < forwardPropLayer.Count; forwardPropNeuronIndex++)
+                    {
+                        inputsBuffer[forwardPropNeuronIndex] = forwardPropLayer[forwardPropNeuronIndex].output(inputs);
+                    }
+
+                    inputs = inputsBuffer;
+                }
+
+                //iterate over neurons
+                for (int neuronIndex = 0; neuronIndex < layer.Count; neuronIndex++)
+                {
+                    if (layerIndex == perceptrons.Count - 1)
+                    {
+                        layer[neuronIndex].train(inputs, target, false);
+                    }
+                    else
+                    {
+                        //sum error
+                        float errorToPass = 0F;
+                        foreach (Perceptron pOfError in perceptrons[layerIndex + 1])
+                        {
+                            errorToPass += pOfError.error * pOfError.weights[neuronIndex];
+                        }
+
+                        layer[neuronIndex].train(inputs, target, true);
+                    }
+                }
+            }
         }
-
     }
 }

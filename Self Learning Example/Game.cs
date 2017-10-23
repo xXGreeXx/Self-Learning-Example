@@ -67,6 +67,7 @@ namespace Self_Learning_Example
             int width = canvas.Width;
             int height = canvas.Height;
             Brush shadowGray = new SolidBrush(Color.FromArgb(120, 130, 130, 130));
+            Font f = new Font(FontFamily.GenericSansSerif, 20, FontStyle.Bold);
 
             #region Grid
             //draw grid
@@ -180,6 +181,7 @@ namespace Self_Learning_Example
                         float targetY = y + 125 - (player1Brain.perceptrons[layerIndex - 1].Count * 55) / 2 + 20 + (weightIndex * 55);
                         if (weight < 0) g.DrawLine(new Pen(Brushes.Black, conWeight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
                         else g.DrawLine(new Pen(Brushes.White, conWeight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
+                        g.DrawString(neuron.lastOut.ToString(), f, Brushes.White, xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2);
 
                         weightIndex++;
                     }
@@ -211,6 +213,7 @@ namespace Self_Learning_Example
                         float targetY = y + 125 - (player1Brain.perceptrons[layerIndex - 1].Count * 55) / 2 + 20 + (weightIndex * 55);
                         if (weight < 0) g.DrawLine(new Pen(Brushes.Black, conWeight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
                         else g.DrawLine(new Pen(Brushes.White, conWeight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
+                        g.DrawString(neuron.lastOut.ToString(), f, Brushes.White, xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2);
 
                         weightIndex++;
                     }
@@ -226,8 +229,8 @@ namespace Self_Learning_Example
             //draw text if not started
             if (!started)
             {
-                Font f = new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold);
-                g.DrawString("Click Anywhere To Begin", f, Brushes.Green, width / 2 - g.MeasureString("Click Anywhere To Begin", f).Width / 2, 150);
+                Font f2 = new Font(FontFamily.GenericSansSerif, 25, FontStyle.Bold);
+                g.DrawString("Click Anywhere To Begin", f2, Brushes.Green, width / 2 - g.MeasureString("Click Anywhere To Begin", f2).Width / 2, 150);
             }
         }
 
@@ -332,9 +335,12 @@ namespace Self_Learning_Example
             float[] output = brain.ForwardPropagate(inputs);
 
             //move with output
-            positionIndex += output[0] < 0 ? -1 : 1;
-            positionIndex += output[1] < 0 ? -1 * widthOfTileArray : 1 * widthOfTileArray;
-            playerRotation = output[0] > 0 ? output[1] < 0 ? 0 : 180 : output[1] > 0 ? 270 : 90;
+            //Console.WriteLine(output[0] + " " + output[1]);
+            positionIndex += output[0] < 1 ? -1 : 1;
+            positionIndex += output[1] < 1 ? -1 * widthOfTileArray : 1 * widthOfTileArray;
+
+            playerRotation = output[0] < 1 ? 270 : 90;
+            playerRotation = output[1] < 1 ? 0 : 180;
 
             //check if it went off the edge
             int posX = positionIndex / heightOfTileArray;
@@ -346,22 +352,21 @@ namespace Self_Learning_Example
             positionIndex = posX + posY * widthOfTileArray;
 
             //handle collisions
-            float appleAcheived = 0.0F;
             for (int appleIndex = 0; appleIndex < apples.Count; appleIndex++)
             {
                 if (apples[appleIndex] == positionIndex)
                 {
                     apples.RemoveAt(appleIndex);
-                    appleAcheived += 0.5F;
                 }
             }
 
 
             //train nn
             //TODO\\
-            if (appleAcheived.Equals(0)) appleAcheived -= 0.5F;
+            float targetX = output[0] + r.Next(-1, 1);
+            float targetY = output[1] + r.Next(-1, 1);
 
-            brain.BackPropagate(inputs, output[0] + appleAcheived);
+            brain.BackPropagate(inputs, new float[] { targetX, targetY });
             
 
             //return new position of player

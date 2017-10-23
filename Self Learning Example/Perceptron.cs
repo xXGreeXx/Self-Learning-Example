@@ -8,7 +8,8 @@ namespace Self_Learning_Example
         public float[] weights { get; private set; }
         public int outputs { get; private set; }
         public float error { get; private set; } = 0;
-        float bias = 1;
+        public float lastOut { get; private set; } = 0;
+        float bias = 0.5F;
 
         //constructor
         public Perceptron(int numberOfInputs, int numberOfOutputs)
@@ -36,6 +37,7 @@ namespace Self_Learning_Example
             }
             answer += bias;
 
+            lastOut = answer;
             return answer;
         }
 

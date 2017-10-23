@@ -6,7 +6,7 @@ namespace Self_Learning_Example
     public class NeuralNetwork
     {
         //define global variables
-        public static float learningRate { get; } = 0.25F;
+        public static float learningRate { get; } = 0.001F;
         public List<List<Perceptron>> perceptrons { get; private set; } = new List<List<Perceptron>>();
 
         //constructor
@@ -47,7 +47,7 @@ namespace Self_Learning_Example
         }
 
         //backpropagate
-        public void BackPropagate(float[] inputsToFeed, float target)
+        public void BackPropagate(float[] inputsToFeed, float[] target)
         {
             float[] inputs = inputsToFeed;
 
@@ -61,6 +61,7 @@ namespace Self_Learning_Example
                 {
                     List<Perceptron> forwardPropLayer = perceptrons[forwardPropLayerIndex];
                     float[] inputsBuffer = new float[forwardPropLayer.Count];
+
                     //iterate over forward propagate neurons
                     for (int forwardPropNeuronIndex = 0; forwardPropNeuronIndex < forwardPropLayer.Count; forwardPropNeuronIndex++)
                     {
@@ -69,13 +70,13 @@ namespace Self_Learning_Example
 
                     inputs = inputsBuffer;
                 }
-
+                
                 //iterate over neurons
                 for (int neuronIndex = 0; neuronIndex < layer.Count; neuronIndex++)
                 {
                     if (layerIndex == perceptrons.Count - 1)
                     {
-                        layer[neuronIndex].train(inputs, target, false);
+                        layer[neuronIndex].train(inputs, target[neuronIndex], false);
                     }
                     else
                     {
@@ -86,7 +87,7 @@ namespace Self_Learning_Example
                             errorToPass += pOfError.error * pOfError.weights[neuronIndex];
                         }
 
-                        layer[neuronIndex].train(inputs, target, true);
+                        layer[neuronIndex].train(inputs, errorToPass, true);
                     }
                 }
             }

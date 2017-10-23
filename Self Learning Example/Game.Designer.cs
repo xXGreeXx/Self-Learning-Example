@@ -54,7 +54,6 @@
             // 
             // physicsTimerUpdate
             // 
-            this.physicsTimerUpdate.Interval = 500;
             this.physicsTimerUpdate.Tick += new System.EventHandler(this.physicsTimerUpdate_Tick);
             // 
             // Game

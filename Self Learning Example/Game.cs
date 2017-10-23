@@ -50,6 +50,8 @@ namespace Self_Learning_Example
             apples.Add(r.Next(0, widthOfTileArray * heightOfTileArray));
 
             //start main loop
+            physicsTimerUpdate.Interval = 100;
+
             updateTimer.Start();
             physicsTimerUpdate.Start();
         }
@@ -67,7 +69,7 @@ namespace Self_Learning_Example
             int width = canvas.Width;
             int height = canvas.Height;
             Brush shadowGray = new SolidBrush(Color.FromArgb(120, 130, 130, 130));
-            Font f = new Font(FontFamily.GenericSansSerif, 20, FontStyle.Bold);
+            Font f = new Font(FontFamily.GenericSansSerif, 15, FontStyle.Bold);
 
             #region Grid
             //draw grid
@@ -110,7 +112,7 @@ namespace Self_Learning_Example
                 }
                 if (i == player2Index)
                 {
-                    g.FillRectangle(Brushes.Red, x + 1, y + 1, tileSize - 1, tileSize - 1);
+                    g.FillRectangle(Brushes.Blue, x + 1, y + 1, tileSize - 1, tileSize - 1);
 
                     //draw field of view
                     if (player1Rotation == 0)
@@ -172,6 +174,7 @@ namespace Self_Learning_Example
                 foreach (Perceptron neuron in layer)
                 {
                     g.FillEllipse(Brushes.Black, xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2, 40, 40);
+                    g.DrawString(Math.Round(neuron.lastOut, 1).ToString(), f, Brushes.White, xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2);
 
                     int weightIndex = 0;
                     foreach (float weight in neuron.weights)
@@ -181,7 +184,6 @@ namespace Self_Learning_Example
                         float targetY = y + 125 - (player1Brain.perceptrons[layerIndex - 1].Count * 55) / 2 + 20 + (weightIndex * 55);
                         if (weight < 0) g.DrawLine(new Pen(Brushes.Black, conWeight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
                         else g.DrawLine(new Pen(Brushes.White, conWeight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
-                        g.DrawString(neuron.lastOut.ToString(), f, Brushes.White, xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2);
 
                         weightIndex++;
                     }
@@ -204,6 +206,7 @@ namespace Self_Learning_Example
                 foreach (Perceptron neuron in layer)
                 {
                     g.FillEllipse(Brushes.Black, xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2, 40, 40);
+                    g.DrawString(Math.Round(neuron.lastOut, 1).ToString(), f, Brushes.White, xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2);
 
                     int weightIndex = 0;
                     foreach (float weight in neuron.weights)
@@ -213,7 +216,6 @@ namespace Self_Learning_Example
                         float targetY = y + 125 - (player1Brain.perceptrons[layerIndex - 1].Count * 55) / 2 + 20 + (weightIndex * 55);
                         if (weight < 0) g.DrawLine(new Pen(Brushes.Black, conWeight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
                         else g.DrawLine(new Pen(Brushes.White, conWeight), xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2 + 20, xOfPreview1 - 125 + 40, targetY);
-                        g.DrawString(neuron.lastOut.ToString(), f, Brushes.White, xOfPreview1, y + yOfPreview1 + 125 - (layer.Count * 55) / 2);
 
                         weightIndex++;
                     }
@@ -352,21 +354,34 @@ namespace Self_Learning_Example
             positionIndex = posX + posY * widthOfTileArray;
 
             //handle collisions
+            Boolean foundApple = false;
             for (int appleIndex = 0; appleIndex < apples.Count; appleIndex++)
             {
                 if (apples[appleIndex] == positionIndex)
                 {
                     apples.RemoveAt(appleIndex);
+                    foundApple = true;
+                    break;
                 }
             }
 
 
             //train nn
             //TODO\\
-            float targetX = output[0] + r.Next(-1, 1);
-            float targetY = output[1] + r.Next(-1, 1);
+            float targetX = output[0];
+            float targetY = output[1];
 
-            brain.BackPropagate(inputs, new float[] { targetX, targetY });
+            if (foundApple)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    brain.BackPropagate(inputs, new float[] { targetX, targetY });
+                }
+            }
+            else
+            {
+                brain.BackPropagate(inputs, new float[] { targetX + (float)r.NextDouble(), targetY + (float)r.NextDouble() });
+            }
             
 
             //return new position of player

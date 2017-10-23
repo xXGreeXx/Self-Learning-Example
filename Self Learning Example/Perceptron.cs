@@ -8,7 +8,7 @@ namespace Self_Learning_Example
         public float[] weights { get; private set; }
         public int outputs { get; private set; }
         public float error { get; private set; } = 0;
-        public float lastOut { get; private set; } = 0;
+        public float lastOut { get; set; } = 0;
         float bias = 0.5F;
 
         //constructor

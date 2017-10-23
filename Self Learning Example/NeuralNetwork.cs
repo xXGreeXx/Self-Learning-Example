@@ -27,6 +27,12 @@ namespace Self_Learning_Example
         {
             float[] inputs = inputsToFeed;
 
+            //load inputs into first layer, for preview reasons
+            foreach (Perceptron p in perceptrons[0])
+            {
+                p.lastOut = inputs[perceptrons[0].IndexOf(p)];
+            }
+
             //iterate over layers
             for (int layerIndex = 0; layerIndex < perceptrons.Count; layerIndex++)
             {

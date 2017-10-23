@@ -13,10 +13,10 @@ namespace Self_Learning_Example
         public NeuralNetwork()
         {
             //input layer(3 inputs in front of creature)
-            perceptrons.Add(new List<Perceptron>() { new Perceptron(0, 4), new Perceptron(0, 4), new Perceptron(0, 4) });
+            perceptrons.Add(new List<Perceptron>() { new Perceptron(0, 4) });
 
             //hidden layer(4 layers)
-            perceptrons.Add(new List<Perceptron>() { new Perceptron(3, 2), new Perceptron(3, 2), new Perceptron(3, 2), new Perceptron(3, 2) });
+            perceptrons.Add(new List<Perceptron>() { new Perceptron(1, 2), new Perceptron(1, 2), new Perceptron(1, 2), new Perceptron(1, 2) });
 
             //output layer(xOffs and yoffs to move(-1, 1))
             perceptrons.Add(new List<Perceptron>() { new Perceptron(4, 2), new Perceptron(4, 2) });

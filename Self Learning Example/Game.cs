@@ -87,27 +87,19 @@ namespace Self_Learning_Example
                     //draw field of view
                     if (player1Rotation == 0)
                     {
-                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                         g.FillRectangle(shadowGray, (x - 0 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
-                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                     }
                     if (player1Rotation == 90)
                     {
-                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                         g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y - 0 * tileSize) + 1, tileSize - 1, tileSize - 1);
-                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                     }
                     if (player1Rotation == 180)
                     {
-                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                         g.FillRectangle(shadowGray, (x - 0 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
-                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                     }
                     if (player1Rotation == 270)
                     {
-                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                         g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y - 0 * tileSize) + 1, tileSize - 1, tileSize - 1);
-                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                     }
                 }
                 if (i == player2Index)
@@ -117,27 +109,19 @@ namespace Self_Learning_Example
                     //draw field of view
                     if (player1Rotation == 0)
                     {
-                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                         g.FillRectangle(shadowGray, (x - 0 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
-                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                     }
                     if (player1Rotation == 90)
                     {
-                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                         g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y - 0 * tileSize) + 1, tileSize - 1, tileSize - 1);
-                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                     }
                     if (player1Rotation == 180)
                     {
-                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                         g.FillRectangle(shadowGray, (x - 0 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
-                        g.FillRectangle(shadowGray, (x + 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                     }
                     if (player1Rotation == 270)
                     {
-                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y - 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                         g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y - 0 * tileSize) + 1, tileSize - 1, tileSize - 1);
-                        g.FillRectangle(shadowGray, (x - 1 * tileSize) + 1, (y + 1 * tileSize) + 1, tileSize - 1, tileSize - 1);
                     }
                 }
 
@@ -268,41 +252,27 @@ namespace Self_Learning_Example
         private int simulateNeuralNetwork(NeuralNetwork brain, int positionIndex, int enemyPositionIndex, out int playerRotation)
         {
             //get field of view
-            float[] inputs = new float[3];
-            float[] fieldOfView = new float[3];
+            float[] inputs = new float[1];
+            float[] fieldOfView = new float[1];
 
             if (player1Rotation == 0)
             {
-                fieldOfView = new float[3];
-                fieldOfView[0] = (player1Index + -1 * widthOfTileArray) - 1;
-                fieldOfView[1] = (player1Index + -1 * widthOfTileArray) - 0;
-                fieldOfView[2] = (player1Index + -1 * widthOfTileArray) + 1;
+                fieldOfView[0] = (player1Index + -1 * widthOfTileArray) - 0;
             }
             if (player1Rotation == 90)
             {
-                fieldOfView = new float[3];
-                fieldOfView[0] = (player1Index + 1 * widthOfTileArray) + 1;
-                fieldOfView[1] = (player1Index + 0 * widthOfTileArray) + 1;
-                fieldOfView[2] = (player1Index + -1 * widthOfTileArray) + 1;
+                fieldOfView[0] = (player1Index + 0 * widthOfTileArray) + 1;
             }
             if (player1Rotation == 180)
             {
-                fieldOfView = new float[3];
-                fieldOfView[0] = (player1Index + 1 * widthOfTileArray) - 1;
-                fieldOfView[1] = (player1Index + 1 * widthOfTileArray) - 0;
-                fieldOfView[2] = (player1Index + 1 * widthOfTileArray) + 1;
+                fieldOfView[0] = (player1Index + 1 * widthOfTileArray) - 0;
             }
             if (player1Rotation == 270)
             {
-                fieldOfView = new float[3];
-                fieldOfView[0] = (player1Index + 1 * widthOfTileArray) - 1;
-                fieldOfView[1] = (player1Index + 0 * widthOfTileArray) - 1;
-                fieldOfView[2] = (player1Index + -1 * widthOfTileArray) - 1;
+                fieldOfView[0] = (player1Index + 0 * widthOfTileArray) - 1;
             }
 
             inputs[0] = 0.0F;
-            inputs[1] = 0.0F;
-            inputs[2] = 0.0F;
 
             foreach (float apple in apples)
             {
@@ -310,43 +280,48 @@ namespace Self_Learning_Example
                 {
                     inputs[0] = 0.5F;
                 }
-                if (apple == fieldOfView[1])
-                {
-                    inputs[1] = 0.5F;
-                }
-                if (apple == fieldOfView[2])
-                {
-                    inputs[2] = 0.5F;
-                }
             }
 
             if (fieldOfView[0] == enemyPositionIndex)
             {
                 inputs[0] = 1.0F;
             }
-            if (fieldOfView[1] == enemyPositionIndex)
-            {
-                inputs[1] = 1.0F;
-            }
-            if (fieldOfView[2] == enemyPositionIndex)
-            {
-                inputs[2] = 1.0F;
-            }
 
             //feed to nn
             float[] output = brain.ForwardPropagate(inputs);
 
             //move with output
-            //Console.WriteLine(output[0] + " " + output[1]);
-            positionIndex += output[0] < 1 ? -1 : 1;
-            positionIndex += output[1] < 1 ? -1 * widthOfTileArray : 1 * widthOfTileArray;
+            //TODO\\ STOP HARDCODING ALGORITHMS
+            int posX = 0;
+            int posY = 0;
+            for (int i = 0; i < positionIndex; i++)
+            {
+                if (i == positionIndex)
+                {
+                    break;
+                }
 
-            playerRotation = output[0] < 1 ? 270 : 90;
-            playerRotation = output[1] < 1 ? 0 : 180;
+                posX++;
+                if (posX >= widthOfTileArray)
+                {
+                    posX = 0;
+                    posY++;
+                }
+            }
 
-            //check if it went off the edge
-            int posX = positionIndex / heightOfTileArray;
-            int posY = positionIndex / widthOfTileArray;
+            if (output[0] > output[1])
+            {
+                posX += output[0] < 1 ? -1 : 1;
+                playerRotation = output[0] < 1 ? 270 : 90;
+            }
+            else
+            {
+                posY += output[1] < 1 ? -1 : 1;
+                playerRotation = output[1] < 1 ? 0 : 180;
+            }
+
+            Console.WriteLine(playerRotation);
+
             if (posX < 0) posX = widthOfTileArray;
             if (posX > widthOfTileArray) posX = 0;
             if (posY < 0) posY = heightOfTileArray;
